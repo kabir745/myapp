@@ -8,16 +8,16 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // for parsing application/json
 
 // Routes
 app.use('/api/products', productRoutes);
 
-// Default route
+// Default
 app.get('/', (req, res) => {
-  res.send('API is running...');
+    res.send('API is running...');
 });
 
 app.listen(PORT, () => {
-  console.log('Server is running on port ${PORT}');
+    console.log(Server is running on port ${PORT});
 });

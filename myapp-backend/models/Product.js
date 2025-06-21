@@ -1,21 +1,67 @@
 const db = require('../config/db');
 
-exports.getAll = (callback) => {
-  db.query('SELECT * FROM products', callback);
+// Model object
+const Product = {};
+
+// Create product
+Product.create = (data, result) => {
+    const { name, price, description } = data;
+    db.query("INSERT INTO products (name, price, description) VALUES (?, ?, ?)",
+        [name, price, description],
+        (err, res) => {
+            if (err) {
+                result(err, null);
+                return;
+            }
+            result(null, { id: res.insertId });
+        });
 };
 
-exports.getById = (id, callback) => {
-  db.query('SELECT * FROM products WHERE id = ?', [id], callback);
+// Get all products
+Product.getAll = (result) => {
+    db.query("SELECT * FROM products", (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
+    });
 };
 
-exports.create = (data, callback) => {
-  db.query('INSERT INTO products SET ?', data, callback);
+// Get product by ID
+Product.getById = (id, result) => {
+    db.query("SELECT * FROM products WHERE id = ?", [id], (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
+    });
 };
 
-exports.update = (id, data, callback) => {
-  db.query('UPDATE products SET ? WHERE id = ?', [data, id], callback);
+// Update product by ID
+Product.updateById = (id, data, result) => {
+    const { name, price, description } = data;
+    db.query("UPDATE products SET name = ?, price = ?, description = ? WHERE id = ?",
+        [name, price, description, id],
+        (err, res) => {
+            if (err) {
+                result(err, null);
+                return;
+            }
+            result(null, res);
+        });
 };
 
-exports.delete = (id, callback) => {
-  db.query('DELETE FROM products WHERE id = ?', [id], callback);
+// Delete product by ID
+Product.deleteById = (id, result) => {
+    db.query("DELETE FROM products WHERE id = ?", [id], (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
+    });
 };
+
+module.exports = Product;
